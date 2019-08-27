@@ -1,4 +1,7 @@
 from tkinter import *
+from time import sleep, time
+from random import randint
+
 height = 500
 width = 800
 window = Tk()
@@ -13,6 +16,9 @@ MID_Y = height / 2
 c.move(ship_id, MID_X, MID_Y)
 c.move(ship_id2, MID_X, MID_Y)
 SHIP_SPD = 10
+BUB_CHANCE = 10
+
+
 def move_ship(event) :
     if event.keysym == 'Up':
         c.move(ship_id, 0, -SHIP_SPD)
@@ -27,7 +33,7 @@ def move_ship(event) :
         c.move(ship_id, 0, -SHIP_SPD)
         c.move(ship_id2, 0, -SHIP_SPD)
 c.bind_all('<Key>', move_ship)
-from random import randint
+
 bub_id = list()
 bub_r = list()
 bub_speed = list()
@@ -35,6 +41,8 @@ MIN_BUB_R = 10
 MAX_BNB_R = 30
 MAX_BNB_SPD = 10
 GAP = 100
+
+
 def create_bubble():
     x = width + GAP
     y = randint(0, height)
@@ -43,16 +51,30 @@ def create_bubble():
     bub_id.append(id1)
     bub_r.append(r)
     bub_speed.append(randint(1, MAX_BNB_SPD))
+
+
 def move_bubbles():
     for i in range(len(bub_id)):
         c.move(bub_id[i], -bub_speed[i], 0)
+
+
 def get_coords(id_num):
     pos = c.coords (id_num)
     x = (pos[0] + pos[2])/2
     y = (pos[1] + [3])/2
     return x, y
-from time import sleep, time
-BUB_CHANCE = 10
+
+
+def del_bubble(i):
+    del bub_r[i]
+    del bub_speed[i]
+    c.delete(bub_id[i])
+    del bub_id[i]
+
+
+def none_function():
+    pass
+
 #MAIN GAME LOOP
 while True:
     if randint(1, BUB_CHANCE) == 1:
@@ -60,8 +82,3 @@ while True:
     move_bubbles()
     window.update()
     sleep(0.01)
-def del_bubble(i):
-    del bub_r[i]
-    del bub_speed[i]
-    c.delete(bub_id[i])
-    del bub_id[i]

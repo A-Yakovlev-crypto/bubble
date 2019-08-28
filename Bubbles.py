@@ -6,32 +6,39 @@ height = 500
 width = 800
 window = Tk()
 window.title('Bubble Blastr')
-c = Canvas(window, width = width, height = height, bg = 'darkblue')
+c = Canvas(window, width=width, height=height, bg='darkblue')
 c.pack()
-ship_id = c.create_polygon (5, 5, 5, 25, 30, 15, fill='red')
-ship_id2 = c.create_oval (0, 0, 30, 30, outline='black')
+
+ship = list()
+ship.append(c.create_polygon(5, 5, 5, 25, 30, 15, fill='red'))
+ship.append(c.create_oval(0, 0, 30, 30, outline='red'))
+ship.append(c.create_line(30, 15, 65, 15, fill='red', width=3))
+ship.append(c.create_rectangle(-20, 5, 5, 25, fill='red'))
+
 SHIP_R = 15
 MID_X = width / 2
 MID_Y = height / 2
-c.move(ship_id, MID_X, MID_Y)
-c.move(ship_id2, MID_X, MID_Y)
 SHIP_SPD = 10
 BUB_CHANCE = 10
 
+for ship_part in ship:
+    c.move(ship_part, MID_X, MID_Y)
 
-def move_ship(event) :
+def move_ship(event):
+    delta_x = 0
+    delta_y = 0
     if event.keysym == 'Up':
-        c.move(ship_id, 0, -SHIP_SPD)
-        c.move(ship_id2, 0, -SHIP_SPD)
+        delta_y = -SHIP_SPD
     elif event.keysym == 'Down':
-        c.move(ship_id, 0, -SHIP_SPD)
-        c.move(ship_id2, 0, -SHIP_SPD)
+        delta_y = SHIP_SPD
     elif event.keysym == 'Left':
-        c.move(ship_id, 0, -SHIP_SPD)
-        c.move(ship_id2, 0, -SHIP_SPD)
+        delta_x = -SHIP_SPD
     elif event.keysym == 'Right':
-        c.move(ship_id, 0, -SHIP_SPD)
-        c.move(ship_id2, 0, -SHIP_SPD)
+        delta_x = SHIP_SPD
+    for ship_part in ship:
+        c.move(ship_part, delta_x, delta_y)
+
+
 c.bind_all('<Key>', move_ship)
 
 bub_id = list()
@@ -59,7 +66,7 @@ def move_bubbles():
 
 
 def get_coords(id_num):
-    pos = c.coords (id_num)
+    pos = c.coords(id_num)
     x = (pos[0] + pos[2])/2
     y = (pos[1] + [3])/2
     return x, y
@@ -75,7 +82,9 @@ def del_bubble(i):
 def none_function():
     pass
 
-#MAIN GAME LOOP
+# MAIN GAME LOOP
+
+
 while True:
     if randint(1, BUB_CHANCE) == 1:
         create_bubble()
